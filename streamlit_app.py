@@ -15,7 +15,7 @@ def load_model():
 model = load_model()
 
 # Load the class indices JSON file and create an index-to-class mapping.
-with open("C:/Users/ankit/PycharmProjects/PythonProject1/class_indices.json", "r") as f:
+with open("class_indices.json", "r") as f:
     class_indices = json.load(f)
 index_to_class = {int(v): k for k, v in class_indices.items()}
 
