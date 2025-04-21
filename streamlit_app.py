@@ -2,8 +2,6 @@ import streamlit as st
 import tensorflow as tf
 import numpy as np
 from PIL import Image
-import requests
-from io import BytesIO
 import json
 
 # Use st.cache_resource to cache the model loading
@@ -20,7 +18,7 @@ with open("class_indices.json", "r") as f:
 index_to_class = {int(v): k for k, v in class_indices.items()}
 
 st.title("Vegetable Classifier")
-st.write("Upload an image from your computer or enter an image URL to predict its vegetable class.")
+st.write("Upload an image from your computer to predict its vegetable class.")
 
 # Show the supported vegetable classes as a note
 st.markdown("### ℹ️ Supported Vegetable Classes:")
@@ -42,24 +40,13 @@ st.markdown(
     "- Tomato"
 )
 
-# Let the user choose between uploading a file or entering a URL
-input_method = st.radio("Select input method:", ("Upload Image", "Enter Image URL"))
+# Only allow file upload
+uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 image = None
 
-if input_method == "Upload Image":
-    uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
-    if uploaded_file is not None:
-        image = Image.open(uploaded_file)
-        st.image(image, caption="Uploaded Image", use_container_width=True)
-elif input_method == "Enter Image URL":
-    image_url = st.text_input("Enter the image URL:")
-    if image_url:
-        try:
-            response = requests.get(image_url)
-            image = Image.open(BytesIO(response.content))
-            st.image(image, caption="Image from URL", use_container_width=True)
-        except Exception as e:
-            st.error("Error: Unable to load image from the provided URL. Please ensure it is a direct link to an image.")
+if uploaded_file is not None:
+    image = Image.open(uploaded_file)
+    st.image(image, caption="Uploaded Image", use_container_width=True)
 
 if image is not None:
     if st.button("Predict"):
