@@ -16,3 +16,6 @@ statsmodels
 python-docx
 pyttsx3
 gTTS
+tensorflow
+pillow
+requests
